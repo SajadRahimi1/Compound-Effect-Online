@@ -53,7 +53,9 @@ android {
            keyAlias keystoreProperties['keyAlias']
            keyPassword keystoreProperties['keyPassword']
            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword keystoreProperties['storePassword']        
+           storePassword keystoreProperties['storePassword']   
+           shrinkResources true
+           minifyEnabled true     
        }
    }
    buildTypes {
