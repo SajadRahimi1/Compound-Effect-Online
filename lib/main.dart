@@ -2,9 +2,8 @@ import 'dart:io';
 import 'package:audio_compound_effect/service/Player.dart';
 import 'package:audio_compound_effect/service/download.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 void main() => runApp(MyApp());
 
@@ -85,82 +84,98 @@ class CustomeBody extends StatelessWidget {
     }
 
     getDir();
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          CustomHeader(),
-          Container(
-            padding: EdgeInsets.only(top: 10),
-            child: FloatingActionButton(
-              onPressed: () {
-                Player().pause();
-              },
-              child: Icon(
-                Icons.pause,
-              ),
-            ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height / 1.93,
-            padding: EdgeInsets.symmetric(horizontal: 35),
-            margin: EdgeInsets.only(bottom: 130),
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: _audioNames.length,
-              itemExtent: 45,
-              itemBuilder: (context, index) => ListTile(
-                leading: Text(_audioTime[index]),
-                title: Text(
-                  _audioNames[index],
-                  textAlign: TextAlign.right,
-                ),
-                trailing: IconButton(
-                  icon: Icon(Icons.play_arrow),
-                  iconSize: 22,
-                  onPressed: () {
-                    if (File("$_dir/${_audioPath[index]}").existsSync()) {
-                      Player().play(_audioPath[index]);
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(
-                                "!فایل صوتی یافت نشد",
-                                textAlign: TextAlign.right,
-                              ),
-                              content: Text(
-                                "فایل صوتی ابتدا باید دانلود شود سپس پخش شود",
-                                textAlign: TextAlign.right,
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("بستن")),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      downloadFile(
-                                          _audioPath[index], _audioPath[index]);
-                                      Fluttertoast.showToast(
-                                          msg:
-                                              "درحال دانلود \"${_audioNames[index]}\"");
-                                    },
-                                    child:
-                                        Text("(${_audioSize[index]}) دانلود")),
-                              ],
-                            );
-                          });
-                    }
-                  },
+    return GetMaterialApp(
+      home: SingleChildScrollView(
+        child: Column(
+          children: [
+            CustomHeader(),
+            Container(
+              padding: EdgeInsets.only(top: 10),
+              child: FloatingActionButton(
+                onPressed: () {
+                  Player().pause();
+                  Get.snackbar("", "",
+                      messageText: Text("هیچ فایلی در حال پخش وجود ندارد",
+                          textAlign: TextAlign.right),
+                      icon: Icon(Icons.pause));
+                },
+                child: Icon(
+                  Icons.pause,
                 ),
               ),
             ),
-          )
-        ],
+            Container(
+              height: MediaQuery.of(context).size.height / 1.93,
+              padding: EdgeInsets.symmetric(horizontal: 35),
+              margin: EdgeInsets.only(bottom: 130),
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: _audioNames.length,
+                itemExtent: 45,
+                itemBuilder: (context, index) => ListTile(
+                  leading: Text(_audioTime[index]),
+                  title: Text(
+                    _audioNames[index],
+                    textAlign: TextAlign.right,
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.play_arrow),
+                    iconSize: 22,
+                    onPressed: () {
+                      if (File("$_dir/${_audioPath[index]}").existsSync()) {
+                        Player().play(_audioPath[index]);
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                  "!فایل صوتی یافت نشد",
+                                  textAlign: TextAlign.right,
+                                ),
+                                content: Text(
+                                  "فایل صوتی ابتدا باید دانلود شود سپس پخش شود",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("بستن")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        downloadFile(_audioPath[index],
+                                            _audioPath[index]);
+                                        // Fluttertoast.showToast(
+                                        //     msg:
+                                        //         "درحال دانلود \"${_audioNames[index]}\"");
+                                        Get.snackbar("", "",
+                                            icon: Icon(Icons.download),
+                                            titleText: Text(
+                                              "دانلود",
+                                              textAlign: TextAlign.right,
+                                            ),
+                                            messageText: Text(
+                                              "درحال دانلود \" ${_audioNames[index]}\" ",
+                                              textAlign: TextAlign.right,
+                                            ));
+                                      },
+                                      child: Text(
+                                          "(${_audioSize[index]}) دانلود")),
+                                ],
+                              );
+                            });
+                      }
+                    },
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
