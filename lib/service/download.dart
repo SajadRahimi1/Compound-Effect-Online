@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 Future<void> downloadFile(String url, String fileName) async {
   bool error = false;
   Dio dio = Dio();
   try {
     var dir = await getApplicationDocumentsDirectory();
-    // print(dir.path);
     url =
         "https://github.com/SajadRahimi1/Book-Audio-Flutter/raw/main/assets/$url";
     await dio.download(
@@ -15,10 +15,27 @@ Future<void> downloadFile(String url, String fileName) async {
       "${dir.path}/$fileName",
     );
   } catch (e) {
-    // print(e);
     error = true;
   }
   error
-      ? Fluttertoast.showToast(msg: "دانلود با خطا مواجه شد")
-      : Fluttertoast.showToast(msg: "دانلود با موفقیت به اتمام رسید");
+      ? Get.snackbar("", "",
+          icon: Icon(Icons.file_download_off),
+          titleText: Text(
+            "دانلود",
+            textAlign: TextAlign.right,
+          ),
+          messageText: Text(
+            "دانلود با خطا مواجه شد",
+            textAlign: TextAlign.right,
+          ))
+      : Get.snackbar("", "",
+          titleText: Text(
+            "دانلود",
+            textAlign: TextAlign.right,
+          ),
+          messageText: Text(
+            "دانلود با موفقیت انجام شد",
+            textAlign: TextAlign.right,
+          ),
+          icon: Icon(Icons.download_done));
 }

@@ -2,6 +2,8 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class Player {
   FlutterSound _flutterSound = FlutterSound();
@@ -18,6 +20,12 @@ class Player {
       _flutterSound.thePlayer.isPlaying
           ? _flutterSound.thePlayer.pausePlayer()
           : _flutterSound.thePlayer.resumePlayer();
+    } else {
+      Get.snackbar("", "",
+          messageText: Text(
+            "هیچ فایلی در حال پخش نیست",
+            textAlign: TextAlign.right,
+          ));
     }
   }
 }

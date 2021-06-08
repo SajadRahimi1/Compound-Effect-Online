@@ -26,7 +26,6 @@ dependencies:
   dio: ^4.0.0
   path_provider: ^2.0.2
   flutter_sound: ^8.1.4
-  fluttertoast: ^8.0.7
   get: ^4.1.4
 
 

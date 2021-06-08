@@ -85,6 +85,7 @@ class CustomeBody extends StatelessWidget {
 
     getDir();
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SingleChildScrollView(
         child: Column(
           children: [
@@ -94,10 +95,6 @@ class CustomeBody extends StatelessWidget {
               child: FloatingActionButton(
                 onPressed: () {
                   Player().pause();
-                  Get.snackbar("", "",
-                      messageText: Text("هیچ فایلی در حال پخش وجود ندارد",
-                          textAlign: TextAlign.right),
-                      icon: Icon(Icons.pause));
                 },
                 child: Icon(
                   Icons.pause,
@@ -149,9 +146,6 @@ class CustomeBody extends StatelessWidget {
                                         Navigator.pop(context);
                                         downloadFile(_audioPath[index],
                                             _audioPath[index]);
-                                        // Fluttertoast.showToast(
-                                        //     msg:
-                                        //         "درحال دانلود \"${_audioNames[index]}\"");
                                         Get.snackbar("", "",
                                             icon: Icon(Icons.download),
                                             titleText: Text(
